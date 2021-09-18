@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/blood.css" />
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+
+    <title>DES-based Integration Tests</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- title -->
+        <section>
+          <h4>
+            <p>
+              From logistics process models to automated integration testing:
+            </p>
+            <p>Proof-of-concept using open-source simulation software</p>
+          </h4>
+          <br />
+          <p>
+            <a href="https://fladdimir.github.io">Wladimir Hofmann*</a>,
+            <a href="https://www.researchgate.net/profile/Paul-Reichardt-3"
+              >Paul Reichardt*</a
+            >,
+            <a href="https://www.researchgate.net/profile/Sebastian-Lang"
+              >Sebastian Lang**</a
+            >,
+            <a href="https://www.researchgate.net/profile/Tobias-Reggelin"
+              >Tobias Reggelin*</a
+            >
+          </p>
+          <p>* Otto-von-Guericke-University Magdeburg, Germany</p>
+          <p>
+            ** Fraunhofer Institute for Factory Operation and Automation,
+            Magdeburg, Germany
+          </p>
+        </section>
+        <!-- outline -->
+        <section>
+          <ol>
+            <li>
+              <strong>Motivation</strong>
+            </li>
+            <br />
+            <li>Scenario / Application</li>
+            <br />
+            <li>Implementation / Demo</li>
+          </ol>
+        </section>
+        <!-- motivation -->
+        <section>
+          <section>
+            <h4>Motivation</h4>
+            <ul>
+              <li class="fragment">
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S2212827119305839"
+                >
+                  Virtual Commissioning</a
+                >: (control-)software testing with simulation models
+              </li>
+              <li class="fragment">
+                established on PLC-level e.g. using
+                <a href="https://plant-simulation.de/">Emulate3D</a>
+              </li>
+              <li class="fragment">
+                known for a long time -
+                <a href="https://dl.acm.org/doi/abs/10.1145/324138.324504"
+                  >Auinger et al., 1999</a
+                >
+              </li>
+              <li class="fragment">
+                interesting for all types of software, especially for
+                process-centric logistics applications with complex workflows
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Software development standards</h4>
+            <ul>
+              <li class="fragment">agile software development</li>
+              <li class="fragment">test-driven development</li>
+              <li class="fragment">continuous integration</li>
+            </ul>
+          </section>
+          <section data-background="#f3f3f3" data-background-transition="zoom">
+            <blockquote>
+              How can an integration of
+              <strong> simulation-based testing </strong>
+              into modern
+              <strong> software development workflows </strong>
+              look like, built on
+              <strong> open-source </strong> tools and technologies?
+            </blockquote>
+          </section>
+        </section>
+        <!-- Scenario / Application -->
+        <section>
+          <section>
+            <h4>Scenario</h4>
+            <p>small city-logistics company</p>
+            <p>customers, depots, deliveries, vehicles</p>
+            <p>order management, tour planning, tracking</p>
+            <img
+              alt="tour-planning-map"
+              src="content/map.png"
+              style="width: 60%"
+            />
+          </section>
+          <section>
+            <h4>Scenario - core processes</h4>
+            <img
+              alt="core-processes"
+              src="content/vc-diagram.svg"
+              style="width: 100%; background-color: azure"
+            />
+          </section>
+          <section>
+            <h4>Application structure</h4>
+            <img alt="app-layer" src="content/vc_app_layer.png" height="600" />
+          </section>
+        </section>
+        <section>
+          <section>
+            <h4>DES-based integration testing</h4>
+            <ul class="fragment">
+              <li>
+                Python-based DES with
+                <a href="https://simpy.readthedocs.io/en/latest/"> SimPy </a>
+                /
+                <a href="https://github.com/fladdimir/casymda"> Casymda </a>
+              </li>
+              <li>executable DES model generation from BPMN</li>
+              <li>
+                HTTP-REST-API-interactions via
+                <a href="https://github.com/psf/requests/">requests</a>
+              </li>
+              <li>
+                <a href="https://www.drone.io/"> Drone </a>
+                continuous integration platform
+              </li>
+              <li>
+                <a href="https://www.docker.com/"> Docker </a>
+                for simple setup + local development
+              </li>
+              <li>
+                >
+                <a href="https://github.com/fladdimir/csa-vcom.git"
+                  >public github repository</a
+                >
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>CI-pipeline</h4>
+            <img alt="app-layer" src="content/vc-pipeline.png" />
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>Demo</h4>
+            <pre data-id="code-animation">
+              <code class="language-sh" data-trim data-line-numbers>
+                # from within the cloned repo:
+                docker-compose up
+                # app: http://localhost:4200
+                # emulation: http://localhost:5001
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h4>Screencast 1: App-Client</h4>
+            <video controls>
+              <source src="content/vc-app-screencast.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section>
+            <h4>Screencast 2: DES-Client</h4>
+            <video controls>
+              <source src="content/vs-des-screencast.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section>
+            <h4>Screencast 3: DES-Client + Visu</h4>
+            <video controls>
+              <source src="content/vc_split_x60.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section>
+            <h4>Headless DES-Client for CI</h4>
+            <img alt="app-layer" src="content/vc-headless-sim-ci.png" />
+          </section>
+        </section>
+        <!-- Conclusion -->
+        <section>
+          <h4>Conclusion / Outlook</h4>
+          <ul>
+            <li class="fragment">
+              DES allows extensive and automated integration testing of
+              business-processes
+            </li>
+            <li class="fragment">
+              integration into modern software development workflows possible
+            </li>
+            <li class="fragment">helps to ensure software quality</li>
+            <li class="fragment">
+              accessible open-source technologies and tools
+            </li>
+            <li class="fragment">
+              minimal show-case, only with functional API tests
+            </li>
+            <li class="fragment">quantitative assertions on KPIs possible</li>
+          </ul>
+        </section>
+        <section>
+          <br />
+          <p>Thank you for your attention.</p>
+          <br />
+          <small>
+            <a href="https://github.com/fladdimir/csa-vcom.git">
+              github-repo
+            </a>
+            -
+            <a href="https://fladdimir.github.io/post/csa-vcom/"> blog-post </a>
+          </small>
+          <br />
+          <small>
+            slides by
+            <a href="https://revealjs.com/">reveal.js</a>
+          </small>
+        </section>
+        <!-- end -->
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          //   RevealZoom,
+        ],
+        slideNumber: false,
+        pdfSeparateFragments: false,
+      });
+    </script>
+  </body>
+</html>
