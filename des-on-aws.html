@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" />
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+
+    <title>Python-based DES on AWS</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- title -->
+        <section>
+          <h3>Introduction to AWS for Online Discrete-Event Simulation</h3>
+          <br />
+          <p>
+            <a href="https://fladdimir.github.io">Wladimir Hofmann</a>,
+            <a href="https://www.researchgate.net/profile/Sebastian-Lang"
+              >Sebastian Lang</a
+            >,
+            <a href="https://www.researchgate.net/profile/Paul-Reichardt-3"
+              >Paul Reichardt</a
+            >,
+            <a href="https://www.researchgate.net/profile/Tobias-Reggelin"
+              >Tobias Reggelin</a
+            >
+          </p>
+          <p>Otto-von-Guericke-University Magdeburg, Germany</p>
+        </section>
+        <!-- outline -->
+        <section>
+          <ol>
+            <li>
+              <strong>Motivation / Scenario </strong>
+            </li>
+            <br />
+            <li>Concept</li>
+            <br />
+            <li>Implementation / Demo</li>
+          </ol>
+        </section>
+        <!-- motivation / scenario -->
+        <section>
+          <section>
+            <h4>Motivation</h4>
+            <ul>
+              <li class="fragment">
+                "Digital Twin": simulation model + real-time information =
+                operational insight
+              </li>
+              <li class="fragment">
+                <a
+                  href="https://opus4.kobv.de/opus4-fau/frontdoor/index/index/docId/14548"
+                  >PhD thesis Donhauser (Erlangen, 2020)</a
+                >: simulation-based order scheduling in masonry plants, based on
+                current system state and order data
+              </li>
+              <li class="fragment">
+                <a href="https://plant-simulation.de/">
+                  Siemens Plant Simulation</a
+                >: OPC-UA + ODBC, MS Access DB, manually started simulation runs
+                via management C# application
+              </li>
+            </ul>
+          </section>
+          <section>
+            <blockquote>
+              How can a
+              <strong> scalable digital twin </strong>
+              setup look like, built on
+              <strong> open-source software </strong>
+              &
+              <strong> managed cloud solutions </strong>
+              ?
+            </blockquote>
+          </section>
+        </section>
+        <section data-background="#f3f3f3" data-background-transition="zoom">
+          <h4>Scenario</h4>
+          <ul>
+            <li>simple build-to-order production process:</li>
+          </ul>
+          <img
+            alt="bpmn-diagram"
+            src="content/diagram.png"
+            style="height: 50%"
+          />
+          <blockquote class="fragment">
+            Goal: forecast schedule deviations caused by material delivery
+            delays
+          </blockquote>
+        </section>
+        <!-- Concept -->
+        <section>
+          <h4>Concept</h4>
+          <div class="fragment">
+            <em>Reference-pipeline</em> for digital twin applications:
+            <img
+              alt="reference-pipeline"
+              src="content/concept.png"
+              style="width: 150%"
+            />
+          </div>
+        </section>
+        <!-- implementation / demo -->
+        <section>
+          <section>
+            <h4>Implementation</h4>
+            <ul class="fragment">
+              <li>
+                <a href="https://aws.amazon.com/de/"> AWS </a> cloud services
+                for managed compute/storage
+              </li>
+              <li>
+                Python-based DES with
+                <a href="https://simpy.readthedocs.io/en/latest/"> SimPy </a>
+                /
+                <a href="https://github.com/fladdimir/casymda"> Casymda </a>
+              </li>
+              <li>
+                Infrastructure-as-Code via
+                <a href="https://www.terraform.io/">Terraform</a>
+              </li>
+              <li>
+                <a href="https://www.docker.com/"> Docker </a>
+                +
+                <a href="https://github.com/localstack/localstack">
+                  Localstack
+                </a>
+                for local development
+              </li>
+              <li>
+                >
+                <a
+                  href="https://github.com/fladdimir/csa-simulation-based-sc-forecast.git"
+                  >public github repository</a
+                >
+              </li>
+            </ul>
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>Demo</h4>
+            <pre data-id="code-animation">
+              <code class="language-sh" data-trim data-line-numbers="2|5-6|9-10|14">
+                # docker + terraform required
+                docker-compose up localstack # start local "AWS"
+
+                # prepare lambdas:
+                docker-compose up package-ingest-lambda
+                docker-compose up package-simulation-lambda 
+
+                # setup resources on "AWS":
+                cd terraform && terraform init
+                terraform apply && cd ../
+
+                # run dashboard (http://localhost:8050)
+                # & execute emulation (http://localhost:5001):
+                docker-compose up dashboard emulation
+              </code>
+            </pre>
+          </section>
+          <section>
+            <h4>Screencast</h4>
+            <video controls>
+              <source src="content/screencast.mp4" type="video/mp4" />
+            </video>
+          </section>
+        </section>
+        <!-- Conclusion -->
+        <section>
+          <h4>Conclusion / Outlook</h4>
+          <ul>
+            <li class="fragment">
+              pipeline model for cloud-based digital twin applications
+            </li>
+            <li class="fragment">
+              open-source digital twin implementation for operational forecasts
+            </li>
+            <li class="fragment">
+              simple example: more complex use-case should be implemented
+            </li>
+            <li class="fragment">security aspects should be incorporated</li>
+            <li class="fragment">
+              AWS-based: other vendors should be evaluated
+            </li>
+          </ul>
+        </section>
+        <section>
+          <br />
+          <p>Thank you for your attention.</p>
+          <br />
+          <small>
+            <a
+              href="https://github.com/fladdimir/csa-simulation-based-sc-forecast.git"
+            >
+              github-repo
+            </a>
+            -
+            <a
+              href="https://fladdimir.github.io/post/csa-simulation-based-sc-forecast/"
+            >
+              blog-post
+            </a>
+          </small>
+          <br />
+          <small>
+            slides by
+            <a href="https://revealjs.com/">reveal.js</a>
+          </small>
+        </section>
+        <!-- end -->
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          //   RevealZoom,
+        ],
+        slideNumber: false,
+        pdfSeparateFragments: false,
+      });
+    </script>
+  </body>
+</html>
