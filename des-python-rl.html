@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/night.css" />
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+
+    <title>DES + RL in Logistics</title>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <!-- title -->
+        <section>
+          <h4>
+            <p>
+              Towards the Productive Application of Reinforcement Learning in
+              Logistics:
+            </p>
+            <p>A Case Study on Assembly Line Material Provision Planning</p>
+          </h4>
+          <br />
+          <p>
+            <a href="https://fladdimir.github.io/">Wladimir Hofmann</a>,
+            <a
+              href="https://www.linkedin.com/in/clemens-lennart-schwarz-609815186/"
+              >Clemens L. Schwarz</a
+            >,
+            <a href="https://www.linkedin.com/in/fredrik-branding-064014163/"
+              >Fredrik Branding</a
+            >
+          </p>
+          <p>Lufthansa Industry Solutions AS GmbH</p>
+        </section>
+        <!-- outline -->
+        <section>
+          <ol>
+            <li>
+              <strong>Motivation</strong>
+            </li>
+            <br />
+            <li>Basic Concepts</li>
+            <br />
+            <li>Case-Study</li>
+          </ol>
+        </section>
+        <!-- motivation -->
+        <section>
+          <section>
+            <h4>Motivation</h4>
+            <ul>
+              <li class="fragment">
+                <a
+                  href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf"
+                >
+                  Reinforcement Learning</a
+                >: ML for deriving complex interaction sequences in dynamic
+                environments
+              </li>
+              <li class="fragment">
+                learning from experience to maximize a reward signal, balancing
+                exploration and exploitation
+              </li>
+              <li class="fragment">
+                successful applications e.g. in
+                <a href="https://openai.com/blog/">robotics and gaming</a>
+              </li>
+              <li class="fragment">
+                complexity, uncertainty, multi-dimensionality =>
+                <a href="https://www.springer.com/de/book/9783642036347"
+                  >common challenges in logistics</a
+                >
+              </li>
+            </ul>
+          </section>
+          <section data-background="#f3f3f3" data-background-transition="zoom">
+            <blockquote>
+              How can an <strong>open-source tool-stack</strong> for training
+              and application of
+              <strong>reinforcement learning</strong> algorithms in
+              <strong>logistics</strong>
+              look like?
+            </blockquote>
+          </section>
+        </section>
+        <!-- Basic Concepts -->
+        <section>
+          <section>
+            <h4>Basic Concepts: RL</h4>
+            <ul>
+              <li>Agent & Environment</li>
+              <li>Observation, Action, Reward</li>
+              <li>Action- and Observation-space</li>
+              <li>
+                Python:
+                <a href="https://gym.openai.com/"> OpenAI Gym </a>
+                interface
+              </li>
+              <li>many interactions needed for training</li>
+            </ul>
+            <img
+              alt="gym-interface"
+              src="content/gym_rl_environment_interface.jpg"
+            />
+            <ul></ul>
+          </section>
+          <section>
+            <h4>Basic Concepts: DES</h4>
+            <ul>
+              <li>Discrete-Event Simulation</li>
+              <li>
+                efficient & established way of evaluating logistics systems
+              </li>
+              <li>
+                Python:
+                <a href="https://simpy.readthedocs.io/en/latest/">SimPy</a> &
+                <a href="https://pypi.org/project/casymda/">Casymda</a>
+              </li>
+              <li><a href="https://demo.bpmn.io/">BPMN</a>-based modeling</li>
+            </ul>
+            <img
+              alt="casymda_process_animation"
+              src="content/tilemap_process_simple_x50.gif"
+            />
+          </section>
+          <section>
+            <h4>Basic Concepts: DES + RL</h4>
+            <ul>
+              <li>
+                frictionless wrapping of Casymda models as gym-environments
+              </li>
+              <li>
+                compatible with provided standard RL algorithm implementations
+              </li>
+            </ul>
+            <img alt="gym_sim_env" src="content/sim_env_wrapper.jpg" />
+          </section>
+        </section>
+        <!-- Case-Study -->
+        <section>
+          <section>
+            <h4>Case-Study</h4>
+            <ul>
+              <li>in-plant material provision planning</li>
+              <li>
+                <a
+                  href="https://www.sciencedirect.com/science/article/pii/S2405896319315010"
+                  >Klenk and Galka, 2019</a
+                >
+              </li>
+              <li>production line with 9 assembly stations</li>
+              <li>2 material types, 1 tugger train</li>
+            </ul>
+            <img
+              alt="rl_layout"
+              src="content/rl_layout_50perc.png"
+              style="transform: rotate(-90deg)"
+            />
+          </section>
+          <section>
+            <h4>Case-Study: Processes</h4>
+            <ul>
+              <li>left: product flow</li>
+              <li>right: tugger train, moving between locations</li>
+              <img
+                src="content/rl_proc_model.jpeg"
+                alt="rl_lia_tilemap"
+                style="transform: rotate(-90)"
+              />
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study</h4>
+            <ul>
+              <li>goal: maximize throughput (24h episode)</li>
+              <li class="fragment">
+                bottleneck: tugger train (transport capacity limit)
+              </li>
+              <li class="fragment">
+                observation-space: 48 values (5 per station, 3 per tugger)
+              </li>
+              <li class="fragment">
+                action-space: next movement target (11 alternatives)
+              </li>
+              <li class="fragment">
+                challenges: uneven material demand, transportation capacity
+                limits, tightly coupled production process
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study: Reward (-engineering)</h4>
+            <ul>
+              <li class="fragment">
+                number of produced products in the episode? (>1000 actions
+                before the reward => sparse!)
+              </li>
+              <li class="fragment">
+                each successful delivery? (2 actions => less sparse, but
+                exploitable)
+              </li>
+              <li class="fragment">
+                compromise: completion of each product (~20 steps)
+              </li>
+              <li class="fragment">
+                DES: varying step duration => time-dependent negative reward per
+                step (increased over time)
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study: RL-Algorithms</h4>
+            <ul>
+              <li>
+                stable-baselines: different implementations of standard
+                algorithms
+              </li>
+              <li>
+                <a
+                  href="https://stable-baselines3.readthedocs.io/en/master/guide/algos.html"
+                >
+                  version 3
+                </a>
+                is up-to-date (we had used an
+                <a href="https://github.com/hill-a/stable-baselines"
+                  >older version</a
+                >)
+              </li>
+              <li>
+                evaluated implementations, suited for Discrete spaces: ACER,
+                ACKTR, DQN, PPO2
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study: Heuristic</h4>
+            <ul>
+              <li>hand-coded heuristic for comparison</li>
+              <li class="fragment">
+                simple approach: complete delivery of 5 units to the station
+                with the lowest inventory
+              </li>
+              <li class="fragment">maximize utilization of the bottleneck</li>
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study: Heuristic</h4>
+            <img
+              src="content/rl_lia_tilemap.gif"
+              alt="rl_lia_tilemap"
+              style="transform: rotate(0deg)"
+            />
+          </section>
+          <section>
+            <h4>Case-Study: RL Training</h4>
+            <ul>
+              <li>separated runs for each algorithm</li>
+              <li>
+                3 * 10e6 gym-steps => up to ~2.5h (on a notebook, we're not
+                OpenAI)
+              </li>
+              <li>
+                variable time per gym-step => variable number of steps per
+                24h-episode
+              </li>
+              <li>350 - 1000 episodes = "days" of experience</li>
+            </ul>
+          </section>
+          <section>
+            <h4>Case-Study: RL Performance</h4>
+            <img
+              src="content/rl_training_progress.png"
+              alt="rl_training_progress"
+            />
+          </section>
+          <section>
+            <h4>Case-Study: Our best agent</h4>
+            <img src="content/rl_tilemap_acer_1e6.gif" alt="rl_best_agent" />
+          </section>
+        </section>
+        <!-- Conclusion -->
+        <section>
+          <h4>Conclusion / Outlook</h4>
+          <ul>
+            <li class="fragment">
+              best agent: ~78% of the (near-optimal) heuristics
+            </li>
+            <li class="fragment">
+              hyperparameter tuning, scalability (<a
+                href="https://docs.ray.io/en/latest/"
+                >ray</a
+              >)
+            </li>
+            <li class="fragment">
+              extended, published gym-environments for logistics benchmarks
+            </li>
+            <li class="fragment">
+              interesting environment extension: multiple tuggers
+              (observation-space: repeated values, equivariance, Graph Neural
+              Networks ?)
+            </li>
+          </ul>
+        </section>
+        <section>
+          <br />
+          <p>Thank you for your attention.</p>
+          <br />
+          <small>
+            <a href="https://github.com/fladdimir/tugger-routing.git">
+              github-repo
+            </a>
+            |
+            <a href="https://fladdimir.github.io/post/tugger-routing/">
+              blog-post
+            </a>
+          </small>
+          <br />
+          <small>
+            slides:
+            <a href="https://revealjs.com/">reveal.js</a>
+          </small>
+        </section>
+        <!-- end -->
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+          //   RevealZoom,
+        ],
+        slideNumber: false,
+        pdfSeparateFragments: false,
+      });
+    </script>
+  </body>
+</html>
