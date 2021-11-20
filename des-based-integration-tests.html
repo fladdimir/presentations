@@ -47,35 +47,35 @@
         <section>
           <ol>
             <li>
-              <strong>Motivation</strong>
+              <strong>Introduction</strong>
             </li>
             <br />
-            <li>Scenario / Application</li>
+            <li>Scenario</li>
             <br />
-            <li>Implementation / Demo</li>
+            <li>Demo</li>
           </ol>
         </section>
         <!-- motivation -->
         <section>
           <section>
-            <h4>Motivation</h4>
+            <h4>Introduction</h4>
             <ul>
               <li class="fragment">
-                <a
+                (control-)software testing with simulation models:<a
                   href="https://www.sciencedirect.com/science/article/pii/S2212827119305839"
                 >
                   Virtual Commissioning</a
-                >: (control-)software testing with simulation models
-              </li>
-              <li class="fragment">
-                established on PLC-level e.g. using
-                <a href="https://plant-simulation.de/">Emulate3D</a>
+                >
               </li>
               <li class="fragment">
                 known for a long time -
                 <a href="https://dl.acm.org/doi/abs/10.1145/324138.324504"
                   >Auinger et al., 1999</a
                 >
+              </li>
+              <li class="fragment">
+                established on PLC-level e.g. using
+                <a href="https://emulate3d.de/">Emulate3D</a>
               </li>
               <li class="fragment">
                 interesting for all types of software, especially for
@@ -88,16 +88,23 @@
             <br />
             <ul>
               <li class="fragment">
-                agile software development (iterative, frequent adaption to
-                requirements changes)
+                <a href="https://agilemanifesto.org/"
+                  >agile software development </a
+                >(iterative, frequent adaption to requirements changes)
               </li>
               <br />
               <li class="fragment">
-                test-driven development (test-first approach)
+                <a
+                  href="https://www.amazon.de/Test-Driven-Development-Example-Signature/dp/0321146530"
+                  >test-driven development </a
+                >(test-first approach)
               </li>
               <br />
               <li class="fragment">
-                continuous integration (build automation, automated testing)
+                <a
+                  href="https://www.oreilly.com/library/view/continuous-integration-improving/9780321336385/"
+                  >continuous integration </a
+                >(build automation, automated testing)
               </li>
             </ul>
           </section>
@@ -126,7 +133,13 @@
             />
           </section>
           <section>
-            <h4>Scenario - core processes</h4>
+            <h4>Planning Web-App:</h4>
+            <video controls>
+              <source src="content/vc-app-screencast.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section>
+            <h4>3 Core processes</h4>
             <img
               alt="core-processes"
               src="content/vc-diagram.svg"
@@ -134,18 +147,65 @@
             />
           </section>
           <section>
+            <h4>Discrete-Event Simulation Model</h4>
+            <video controls>
+              <source src="content/vs-des-screencast.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section>
             <h4>Application structure</h4>
             <img alt="app-layer" src="content/vc_app_layer.png" height="600" />
           </section>
         </section>
         <section>
+          <section data-background="content/terminal.png">
+            <h4>Demo</h4>
+            <ul>
+              <li>run the DES model against the application backend:</li>
+            </ul>
+            <pre data-id="code-animation">
+              <code class="language-sh" data-trim data-line-numbers>
+                # from within the cloned repo:
+                # (https://github.com/fladdimir/csa-vcom.git)
+                docker-compose up
+                # simulation: http://localhost:5001
+                # web-app: http://localhost:4200
+              </code>
+            </pre>
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>DES-Client + Visualization</h4>
+            <video controls>
+              <source src="content/vc_split_x60.mp4" type="video/mp4" />
+            </video>
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>CI-pipeline</h4>
+            <img alt="app-layer" src="content/vc-pipeline.png" />
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>Headless DES-Client for CI</h4>
+            <img alt="app-layer" src="content/vc-headless-sim-ci.png" />
+          </section>
+          <section data-background="content/terminal.png">
+            <h4>Development Workflow</h4>
+            <video controls>
+              <source
+                src="content/screencast_gitea_drone_workflow.mp4"
+                type="video/mp4"
+              />
+            </video>
+          </section>
+        </section>
+        <!-- Conclusion -->
+        <section>
           <section>
-            <h4>DES-based integration testing</h4>
+            <h4>Conclusion I</h4>
             <ul class="fragment">
               <li>
                 Python-based DES with
                 <a href="https://simpy.readthedocs.io/en/latest/"> SimPy </a>
-                /
+                +
                 <a href="https://github.com/fladdimir/casymda"> Casymda </a>
               </li>
               <li>executable DES model generation from BPMN</li>
@@ -170,63 +230,25 @@
             </ul>
           </section>
           <section>
-            <h4>CI-pipeline</h4>
-            <img alt="app-layer" src="content/vc-pipeline.png" />
+            <h4>Conclusion II</h4>
+            <ul class="fragment">
+              <li>
+                DES allows
+                <strong>extensive and automated integration testing</strong> of
+                business-processes
+              </li>
+              <li>
+                integration into modern software
+                <strong>development workflows</strong> possible
+              </li>
+              <li>helps to ensure <strong>software quality</strong></li>
+              <li>
+                <strong>accessible</strong> open-source technologies and tools
+              </li>
+              <li>minimal show-case, only with functional API tests</li>
+              <li>quantitative assertions on KPIs possible</li>
+            </ul>
           </section>
-          <section data-background="content/terminal.png">
-            <h4>Demo</h4>
-            <pre data-id="code-animation">
-              <code class="language-sh" data-trim data-line-numbers>
-                # from within the cloned repo:
-                docker-compose up
-                # app: http://localhost:4200
-                # emulation: http://localhost:5001
-              </code>
-            </pre>
-          </section>
-          <section>
-            <h4>Screencast 1: App-Client</h4>
-            <video controls>
-              <source src="content/vc-app-screencast.mp4" type="video/mp4" />
-            </video>
-          </section>
-          <section>
-            <h4>Screencast 2: DES-Client</h4>
-            <video controls>
-              <source src="content/vs-des-screencast.mp4" type="video/mp4" />
-            </video>
-          </section>
-          <section>
-            <h4>Screencast 3: DES-Client + Visu</h4>
-            <video controls>
-              <source src="content/vc_split_x60.mp4" type="video/mp4" />
-            </video>
-          </section>
-          <section>
-            <h4>Headless DES-Client for CI</h4>
-            <img alt="app-layer" src="content/vc-headless-sim-ci.png" />
-          </section>
-        </section>
-        <!-- Conclusion -->
-        <section>
-          <h4>Conclusion / Outlook</h4>
-          <ul>
-            <li class="fragment">
-              DES allows extensive and automated integration testing of
-              business-processes
-            </li>
-            <li class="fragment">
-              integration into modern software development workflows possible
-            </li>
-            <li class="fragment">helps to ensure software quality</li>
-            <li class="fragment">
-              accessible open-source technologies and tools
-            </li>
-            <li class="fragment">
-              minimal show-case, only with functional API tests
-            </li>
-            <li class="fragment">quantitative assertions on KPIs possible</li>
-          </ul>
         </section>
         <section>
           <br />
